@@ -1,0 +1,159 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <errno.h>
+
+/**
+* @breaf проверяет правильность ввода данных
+* @return возвращает результат в случае успеха
+*/
+double double_get_value();
+
+/**
+* @breaf вычисляет площадь треугольника
+* @param a – первая сторона треугольнка
+* @param b – вторая сторона треугольника
+* @param c – третья сторона треугольника
+* @return возвращает площадь треугольника
+*/
+double TriangleArea(double a, double b, double c);
+
+/**
+* @breaf вычисляет площадь прямоугольника
+* @param a – первая сторона прямоугольника
+* @param b – вторая сторона прямоугольника
+* @return возвращает площадь прямоугольника
+*/
+double RectangleArea(double a, double b);
+
+/**
+* @breaf проверяет правильность ввода данных
+* @return возвращает результат в случае успеха
+*/
+int int_get_value();
+
+/**
+ * @breaf Проверяет существование треугольника по заданным сторонам
+ * @param a – первая сторона треугольника
+ * @param b – вторая сторона треугольника
+ * @param c – третья сторона треугольника
+ */
+void check_triangle_exist(double a, double b, double c);
+
+/**
+ * @breaf проверяет существование прямоугольника по заданным сторонам
+ * @param a – первая сторона прямоугольника
+ * @param b – вторая сторона прямоугольника
+ */
+void check_rectangle_exist(double a, double b);
+
+/**
+* @brief Выбор типа фигуры.
+*/
+enum shape_type {
+    /**
+    * @brief Выбор треугольника.
+    */
+    Triangle = 1,
+
+    /**
+    * @brief Выбор прямоугольника.
+    */
+    Rectangle
+};
+
+int main()
+{
+    printf("Выберите тип фигуры:\n");
+    printf("1. Треугольник\n");
+    printf("2. Прямоугольник\n");
+    int choose = int_get_value();
+    enum shape_type user_input = (enum shape_type)choose;
+    switch (user_input)
+    {
+        case Triangle:
+            printf("Введите первую сторону треугольника: ");
+            double a = double_get_value();
+            printf("Введите вторую сторону треугольника: ");
+            double b = double_get_value();
+            printf("Введите третью сторону треугольника: ");
+            double c = double_get_value();
+            check_triangle_exist(a, b, c);
+            double triangle_area = TriangleArea(a, b, c);
+            printf("Площадь заданного треугольника равна: %lf", triangle_area);
+            break;
+        case Rectangle:
+            printf("Введите первую сторону прямоугольника: ");
+            a = double_get_value();
+            printf("Введите вторую сторону прямоугольника: ");
+            b = double_get_value();
+            check_rectangle_exist(a, b);
+            double rectangle_area = RectangleArea(a, b);
+            printf("Площадь заданного прямоугольника равна: %lf", rectangle_area);
+            break;
+    }
+    return 0;
+}
+
+double TriangleArea(double a, double b, double c)
+{
+    double p = (a + b + c) / 2.0;
+    return sqrt(p * (p - a) * (p - b) * (p - c));
+}
+
+double RectangleArea(double a, double b)
+{
+    return a * b;
+}
+
+double double_get_value()
+{
+    double result;
+    double scanf_result = scanf("%lf", &result);
+    if (scanf_result!=1)
+    {
+        errno = EIO;
+        perror("Input/Output error.");
+        abort();
+    }
+    return result;
+}
+
+int int_get_value()
+{
+    int result;
+    int scanf_result = scanf("%d", &result);
+    if (scanf_result!=1)
+    {
+        errno = EIO;
+        perror("Input/Output error.");
+        abort();
+    }
+    return result;
+}
+
+void check_triangle_exist(double a, double b, double c)
+{
+    if ((a <= 0) || (b <= 0) || (c <= 0))
+    {
+        errno = EIO;
+        perror("Введите положительные стороны треугольника.");
+        abort();
+    }
+    if ((a > b + c) || (b > a + c) || (c > b + a))
+    {
+        errno = EIO;
+        perror("Треугольника с заданными сторонами не существует.");
+        abort();
+    }
+}
+
+void check_rectangle_exist(double a, double b)
+{
+    if (a <= 0 || b <= 0)
+    {
+        errno = EIO;
+        perror("Прямоугольника с заданными сторонами не существует.");
+        abort();
+    }
+}
