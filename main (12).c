@@ -151,9 +151,7 @@ int get_value()
     int scanf_result = scanf("%d", &result);
     if (scanf_result!=1)
     {
-        errno = EIO;
-        perror("Error");
-        abort();
+        errors();
     }
     return result;
 }
@@ -163,9 +161,7 @@ int check_size()
     int size = get_value();
     if (size <= 0)
     {
-        errno = EIO;
-        perror("Error");
-        abort();
+        errors();
     }
     return (size_t) size;
 }
@@ -178,9 +174,7 @@ void get_array_manually(int* array, const size_t size, const int low, const int 
         int  x = get_value();
         if (x < low || x > high)
         {
-            errno = EIO;
-            perror("Error");
-            abort();
+           errors();
         }
         array[i] = x;
     }
@@ -245,9 +239,7 @@ void check_range(const int low, const int high)
 {
     if (low > high)
     {
-        errno = EIO;
-        perror("Error");
-        abort();
+        errors();
     }
 }
 
